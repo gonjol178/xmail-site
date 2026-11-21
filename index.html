@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>XMail — Data and identity for AI agents</title>
+<meta name="description" content="XMail builds the resource layer for AI agents: AgentData structured data feeds and email identities agents can operate with.">
+<style>
+  :root{
+    --bg:#0d1117; --surface:#151b24; --line:#26303d; --text:#e8edf2; --muted:#9aa7b4;
+    --accent:#e8b33c; --accent-ink:#161006; --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+    line-height:1.6;font-size:17px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+  header{border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+  .brand{font-weight:700;font-size:21px;letter-spacing:.2px;color:var(--text)}
+  .brand span{color:var(--accent)}
+  .nav nav a{color:var(--muted);margin-left:26px;font-size:15.5px}
+  .nav nav a:hover{color:var(--text);text-decoration:none}
+  .hero{padding:84px 0 64px}
+  .hero h1{font-size:46px;line-height:1.12;margin:0 0 18px;font-weight:700;max-width:640px}
+  .hero p{color:var(--muted);font-size:19px;max-width:620px;margin:0 0 30px}
+  .cta{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:600;
+    padding:12px 22px;border-radius:10px}
+  .cta:hover{text-decoration:none;filter:brightness(1.07)}
+  section{padding:56px 0;border-top:1px solid var(--line)}
+  h2{font-size:27px;margin:0 0 10px}
+  .lede{color:var(--muted);max-width:660px;margin:0 0 30px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  @media (max-width:760px){.grid{grid-template-columns:1fr}.hero h1{font-size:35px}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
+  .card h3{margin:0 0 6px;font-size:21px}
+  .tag{display:inline-block;font-size:12.5px;color:var(--accent);border:1px solid var(--line);
+    border-radius:999px;padding:2px 10px;margin-bottom:14px}
+  .card p{color:var(--muted);margin:0 0 14px;font-size:16px}
+  .card ul{color:var(--muted);margin:0;padding-left:19px;font-size:16px}
+  .card li{margin:5px 0}
+  code{background:#0a0e13;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:14.5px;color:var(--text)}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600}
+  td{color:var(--text)}
+  td.dim{color:var(--muted)}
+  .about p{color:var(--muted);max-width:700px}
+  footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);font-size:14.5px}
+  footer .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand">X<span>Mail</span></div>
+    <nav>
+      <a href="#products">Products</a>
+      <a href="#feed">Live feed</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap hero">
+  <h1>Data and identity for AI agents</h1>
+  <p>Agents that act in the world need two things a chat window cannot give them: reliable data about what is happening, and an identity they can operate under. XMail builds both.</p>
+  <a class="cta" href="#feed">See the live AgentData feed</a>
+</div>
+
+<section id="products">
+  <div class="wrap">
+    <h2>Products</h2>
+    <p class="lede">Two services, one resource layer. Both run in production for our own fleet of agents today.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="tag">Live</div>
+        <h3>AgentData</h3>
+        <p>Structured data feeds that agents can consume directly — no scraping, no HTML parsing, no guesswork. Every signal is verified against its source before it is published.</p>
+        <ul>
+          <li>On-chain opportunity radar: verified free mints and claims on BNB Chain</li>
+          <li>Wallet inflow monitoring with per-event alerts</li>
+          <li>Published as JSON over HTTPS, one key per agent</li>
+        </ul>
+        <p style="margin-top:16px"><a href="feed.json">feed.json</a> · <a href="#feed">sample signals below</a></p>
+      </div>
+      <div class="card">
+        <div class="tag">Pilot</div>
+        <h3>Agent Inbox</h3>
+        <p>An email identity for every agent. Agents sign up, receive verification codes and get notified at an address of their own — instead of borrowing a human's mailbox.</p>
+        <ul>
+          <li>Dedicated inbox per agent on our domain</li>
+          <li>Verification-code and sign-in mail routed to the owning agent</li>
+          <li>Running today for our internal agent fleet</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="feed">
+  <div class="wrap">
+    <h2>Live feed — sample signals</h2>
+    <p class="lede">Recent entries from the AgentData production feed, exactly as agents receive them. Full firehose is key-gated; the public sample is at <a href="feed.json">feed.json</a>.</p>
+    <table>
+      <tr><th>Date (WIB)</th><th>Signal</th><th>Detail</th><th>Source</th></tr>
+      <tr><td class="dim">2026-11-18</td><td>Free mint executed</td><td>AGENTONE Hero cards #5561, #5562 — quota 2/2, 0 BNB</td><td class="dim">BSC tx 0x19e1…f6b4</td></tr>
+      <tr><td class="dim">2026-11-18</td><td>Free claim executed</td><td>MCAT +51,786.639047 per share — 0 BNB</td><td class="dim">BSC tx 0x362b…6bfd</td></tr>
+      <tr><td class="dim">2026-11-17</td><td>Free mint executed</td><td>PXIO Miner #7794, tier Scribe — 0 BNB</td><td class="dim">BSC tx 0xe0f7…7e50</td></tr>
+      <tr><td class="dim">2026-11-18</td><td>Supply alert</td><td>MITI genesis sold out 500/500 free lots before window — flagged, no action</td><td class="dim">On-chain read</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <div class="wrap">
+    <h2>About XMail</h2>
+    <p>XMail is an early-stage, self-funded company based in Indonesia, founded in 2026. We operate a fleet of AI agents across research, monitoring and content production, and we build the infrastructure we found missing: trustworthy data feeds an agent can act on, and email identities an agent can work under.</p>
+    <p>AgentData grew out of our own on-chain monitoring work — months of verified, zero-cost opportunity detection on BNB Chain, run continuously by agents. Agent Inbox grew out of a simpler frustration: every new agent needed a mailbox before it could do anything at all.</p>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p class="lede">For access to the full AgentData feed or the Agent Inbox pilot, write to us:</p>
+    <p><a href="mailto:hello@xmail.my.id">hello@xmail.my.id</a></p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <div>© 2026 XMail · Indonesia</div>
+    <div>AgentData · Agent Inbox</div>
+  </div>
+</footer>
+</body>
+</html>
