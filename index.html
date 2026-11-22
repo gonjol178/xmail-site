@@ -4,71 +4,214 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>XMail — Data and identity for AI agents</title>
-<meta name="description" content="XMail builds the resource layer for AI agents: AgentData structured data feeds and email identities agents can operate with.">
+<meta name="description" content="XMail builds the resource layer for AI agents: AgentData structured data feeds and Agent Inbox email identities agents can operate with.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0d1117; --surface:#151b24; --line:#26303d; --text:#e8edf2; --muted:#9aa7b4;
-    --accent:#e8b33c; --accent-ink:#161006; --radius:14px;
+    --bg:#0a0e13; --bg2:#0d1219; --surface:#11161f; --surface2:#151c28;
+    --line:#232d3b; --line-soft:#1a222e;
+    --text:#edf1f6; --muted:#9aa8ba; --faint:#6b7a8d;
+    --accent:#e8b33c; --accent-deep:#c9962a; --accent-ink:#171106;
+    --green:#3fb96f;
+    --radius:16px;
   }
   *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--text);
-    font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
-    line-height:1.6;font-size:17px}
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    line-height:1.6;font-size:16.5px;-webkit-font-smoothing:antialiased}
   a{color:var(--accent);text-decoration:none}
   a:hover{text-decoration:underline}
-  .wrap{max-width:1020px;margin:0 auto;padding:0 22px}
-  header{border-bottom:1px solid var(--line)}
-  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
-  .brand{font-weight:700;font-size:21px;letter-spacing:.2px;color:var(--text)}
-  .brand span{color:var(--accent)}
-  .nav nav a{color:var(--muted);margin-left:26px;font-size:15.5px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  .mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:50;background:rgba(10,14,19,.82);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft)}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:15px 0}
+  .brand{display:flex;align-items:center;gap:11px;color:var(--text);font-weight:800;font-size:20px;letter-spacing:.2px}
+  .brand:hover{text-decoration:none}
+  .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(145deg,#f0c04a,var(--accent-deep));
+    display:flex;align-items:center;justify-content:center;flex:none}
+  .mark svg{display:block}
+  .brand em{font-style:normal;color:var(--accent)}
+  .nav nav{display:flex;align-items:center;gap:28px}
+  .nav nav a{color:var(--muted);font-size:15px;font-weight:500}
   .nav nav a:hover{color:var(--text);text-decoration:none}
-  .hero{padding:84px 0 64px}
-  .hero h1{font-size:46px;line-height:1.12;margin:0 0 18px;font-weight:700;max-width:640px}
-  .hero p{color:var(--muted);font-size:19px;max-width:620px;margin:0 0 30px}
+  .nav .btn{color:var(--accent-ink);background:var(--accent);font-weight:600;
+    padding:8px 16px;border-radius:9px;font-size:14.5px}
+  .nav .btn:hover{text-decoration:none;filter:brightness(1.08)}
+  @media (max-width:680px){.nav nav a:not(.btn){display:none}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;
+    background:
+      radial-gradient(560px 300px at 82% -60px, rgba(232,179,60,.13), transparent 65%),
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size:auto,44px 44px,44px 44px;
+    border-bottom:1px solid var(--line-soft)}
+  .hero-inner{padding:78px 0 70px;display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center}
+  @media (max-width:920px){.hero-inner{grid-template-columns:1fr;padding:56px 0}}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);
+    background:var(--surface);border-radius:999px;padding:5px 13px 5px 10px;
+    font-size:13px;color:var(--muted);font-weight:500;margin-bottom:24px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 0 0 rgba(63,185,111,.55);animation:pulse 2.2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,185,111,.5)}70%{box-shadow:0 0 0 7px rgba(63,185,111,0)}100%{box-shadow:0 0 0 0 rgba(63,185,111,0)}}
+  .hero h1{font-size:52px;line-height:1.08;margin:0 0 20px;font-weight:800;letter-spacing:-1px}
+  .hero h1 .gold{color:var(--accent)}
+  @media (max-width:560px){.hero h1{font-size:37px}}
+  .hero p{color:var(--muted);font-size:18.5px;margin:0 0 32px;max-width:520px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
   .cta{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:600;
-    padding:12px 22px;border-radius:10px}
-  .cta:hover{text-decoration:none;filter:brightness(1.07)}
-  section{padding:56px 0;border-top:1px solid var(--line)}
-  h2{font-size:27px;margin:0 0 10px}
-  .lede{color:var(--muted);max-width:660px;margin:0 0 30px}
+    padding:13px 24px;border-radius:11px;font-size:16px}
+  .cta:hover{text-decoration:none;filter:brightness(1.08)}
+  .cta.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+  .cta.ghost:hover{border-color:var(--muted)}
+
+  /* terminal panel */
+  .term{background:#0a0d12;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.45)}
+  .term-bar{display:flex;align-items:center;gap:7px;padding:11px 15px;border-bottom:1px solid var(--line-soft);background:var(--surface)}
+  .term-bar i{width:11px;height:11px;border-radius:50%;background:#2a3442;display:block}
+  .term-bar i:first-child{background:#3d4a5c}
+  .term-bar span{margin-left:9px;color:var(--faint);font-size:12.5px}
+  .term pre{margin:0;padding:18px 20px;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;
+    font-size:13px;line-height:1.75;color:#c8d3e0;overflow-x:auto}
+  .k{color:#8fb8e8}.s{color:#e8c97a}.n{color:#7fd6a4}.p{color:#5f7189}
+
+  /* ---------- fact strip ---------- */
+  .strip{border-bottom:1px solid var(--line-soft);background:var(--bg2)}
+  .strip .wrap{display:flex;flex-wrap:wrap;gap:12px 34px;padding:18px 24px}
+  .strip div{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:14.5px;font-weight:500}
+  .strip svg{flex:none}
+
+  /* ---------- sections ---------- */
+  section{padding:74px 0}
+  section.alt{background:var(--bg2);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+  h2{font-size:31px;margin:0 0 12px;font-weight:700;letter-spacing:-.5px}
+  .lede{color:var(--muted);max-width:640px;margin:0 0 36px;font-size:17.5px}
+
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-  @media (max-width:760px){.grid{grid-template-columns:1fr}.hero h1{font-size:35px}}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px}
-  .card h3{margin:0 0 6px;font-size:21px}
-  .tag{display:inline-block;font-size:12.5px;color:var(--accent);border:1px solid var(--line);
-    border-radius:999px;padding:2px 10px;margin-bottom:14px}
-  .card p{color:var(--muted);margin:0 0 14px;font-size:16px}
-  .card ul{color:var(--muted);margin:0;padding-left:19px;font-size:16px}
-  .card li{margin:5px 0}
-  code{background:#0a0e13;border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:14.5px;color:var(--text)}
-  table{width:100%;border-collapse:collapse;font-size:15px}
-  th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
-  th{color:var(--muted);font-weight:600}
+  @media (max-width:820px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:30px}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .card h3{margin:0;font-size:22px;font-weight:700}
+  .tag{font-size:12px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;
+    border-radius:999px;padding:3px 11px;border:1px solid}
+  .tag.live{color:var(--green);border-color:rgba(63,185,111,.4);background:rgba(63,185,111,.08)}
+  .tag.pilot{color:var(--accent);border-color:rgba(232,179,60,.4);background:rgba(232,179,60,.07)}
+  .card p{color:var(--muted);margin:0 0 16px;font-size:16px}
+  .card ul{list-style:none;margin:0 0 6px;padding:0}
+  .card li{color:var(--muted);font-size:15.5px;padding:7px 0 7px 24px;position:relative;border-top:1px solid var(--line-soft)}
+  .card li:first-child{border-top:none}
+  .card li::before{content:"";position:absolute;left:2px;top:15px;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+  .snippet{margin-top:18px;background:#0a0d12;border:1px solid var(--line-soft);border-radius:10px;
+    padding:12px 15px;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:13px;color:#c8d3e0;overflow-x:auto;white-space:nowrap}
+  .snippet .p{color:#5f7189}
+  .card .links{margin-top:18px;font-size:15px;font-weight:500}
+
+  /* how it works */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  @media (max-width:820px){.steps{grid-template-columns:1fr}}
+  .step{border:1px solid var(--line);border-radius:var(--radius);padding:26px;background:var(--surface)}
+  .step .num{font-family:"JetBrains Mono",monospace;color:var(--accent);font-size:14px;font-weight:600;
+    border:1px solid rgba(232,179,60,.35);border-radius:8px;display:inline-block;padding:2px 9px;margin-bottom:15px}
+  .step h3{margin:0 0 8px;font-size:18.5px}
+  .step p{margin:0;color:var(--muted);font-size:15.5px}
+
+  /* feed table */
+  .feed-panel{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .feed-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    padding:15px 20px;border-bottom:1px solid var(--line-soft);background:var(--surface2)}
+  .feed-head .mono{font-size:13px;color:var(--muted)}
+  .ok{color:var(--green);font-weight:600}
+  .table-scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:640px}
+  th,td{text-align:left;padding:13px 20px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  th{color:var(--faint);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.6px}
   td{color:var(--text)}
   td.dim{color:var(--muted)}
-  .about p{color:var(--muted);max-width:700px}
-  footer{border-top:1px solid var(--line);padding:30px 0 44px;color:var(--muted);font-size:14.5px}
-  footer .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  .sig{font-weight:600;white-space:nowrap}
+  .chip{display:inline-block;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px;border:1px solid;white-space:nowrap}
+  .chip.exec{color:var(--green);border-color:rgba(63,185,111,.4);background:rgba(63,185,111,.07)}
+  .chip.alert{color:var(--accent);border-color:rgba(232,179,60,.4);background:rgba(232,179,60,.07)}
+  td a.mono{font-size:12.5px}
+
+  /* about + contact */
+  .about-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:40px}
+  @media (max-width:820px){.about-grid{grid-template-columns:1fr}}
+  .about-grid p{color:var(--muted);margin:0 0 16px}
+  .facts{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);padding:8px 24px;height:fit-content}
+  .facts div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line-soft);font-size:15px}
+  .facts div:last-child{border-bottom:none}
+  .facts dt{color:var(--faint)}
+  .facts dd{margin:0;font-weight:600;text-align:right}
+  .contact-panel{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+    padding:40px;text-align:center}
+  .contact-panel p{color:var(--muted);margin:0 0 14px}
+  .contact-panel .mail{font-size:26px;font-weight:700;letter-spacing:-.3px}
+  @media (max-width:560px){.contact-panel{padding:28px 20px}.contact-panel .mail{font-size:20px}}
+
+  footer{border-top:1px solid var(--line-soft);padding:34px 0 46px;color:var(--faint);font-size:14px;background:var(--bg2)}
+  footer .row{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px 22px}
+  footer a{color:var(--muted)}
 </style>
 </head>
 <body>
+
 <header>
   <div class="wrap nav">
-    <div class="brand">X<span>Mail</span></div>
+    <a class="brand" href="#">
+      <span class="mark" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h13A2.5 2.5 0 0 1 21 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5v-11Z" stroke="#171106" stroke-width="2"/><path d="m4 7 8 6 8-6" stroke="#171106" stroke-width="2" stroke-linejoin="round"/></svg>
+      </span><span>X<em>Mail</em></span>
+    </a>
     <nav>
       <a href="#products">Products</a>
       <a href="#feed">Live feed</a>
       <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a class="btn" href="mailto:hello@xmail.my.id">hello@xmail.my.id</a>
     </nav>
   </div>
 </header>
 
-<div class="wrap hero">
-  <h1>Data and identity for AI agents</h1>
-  <p>Agents that act in the world need two things a chat window cannot give them: reliable data about what is happening, and an identity they can operate under. XMail builds both.</p>
-  <a class="cta" href="#feed">See the live AgentData feed</a>
+<div class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="pill"><span class="dot"></span> AgentData feed is live</div>
+      <h1>Data and identity for <span class="gold">AI agents</span></h1>
+      <p>Agents that act in the world need two things a chat window cannot give them: reliable data about what is happening, and an identity they can operate under. XMail builds both.</p>
+      <div class="cta-row">
+        <a class="cta" href="#feed">See the live feed</a>
+        <a class="cta ghost mono" href="feed.json" style="font-size:14.5px">GET /feed.json</a>
+      </div>
+    </div>
+    <div class="term" aria-label="Sample of the AgentData feed">
+      <div class="term-bar"><i></i><i></i><i></i><span class="mono">feed.json — AgentData public sample</span></div>
+      <pre>{
+  <span class="k">"type"</span>: <span class="s">"free_mint_executed"</span>,
+  <span class="k">"asset"</span>: <span class="s">"AGENTONE Hero #5561, #5562"</span>,
+  <span class="k">"chain"</span>: <span class="s">"bsc"</span>, <span class="k">"cost_bnb"</span>: <span class="n">0</span>,
+  <span class="k">"verified"</span>: <span class="n">true</span>,
+  <span class="k">"tx"</span>: <span class="s">"0x19e1…f6b4"</span> <span class="p">// checked on-chain</span>
+}</pre>
+    </div>
+  </div>
+</div>
+
+<div class="strip">
+  <div class="wrap">
+    <div><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#e8b33c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Verified on-chain before publication</div>
+    <div><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#e8b33c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> JSON over HTTPS — no scraping</div>
+    <div><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#e8b33c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> BNB Chain coverage</div>
+    <div><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#e8b33c" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> One key per agent</div>
+  </div>
 </div>
 
 <section id="products">
@@ -77,25 +220,49 @@
     <p class="lede">Two services, one resource layer. Both run in production for our own fleet of agents today.</p>
     <div class="grid">
       <div class="card">
-        <div class="tag">Live</div>
-        <h3>AgentData</h3>
+        <div class="card-top"><h3>AgentData</h3><span class="tag live">Live</span></div>
         <p>Structured data feeds that agents can consume directly — no scraping, no HTML parsing, no guesswork. Every signal is verified against its source before it is published.</p>
         <ul>
           <li>On-chain opportunity radar: verified free mints and claims on BNB Chain</li>
           <li>Wallet inflow monitoring with per-event alerts</li>
           <li>Published as JSON over HTTPS, one key per agent</li>
         </ul>
-        <p style="margin-top:16px"><a href="feed.json">feed.json</a> · <a href="#feed">sample signals below</a></p>
+        <div class="snippet"><span class="p">$</span> curl https://xmail.my.id/feed.json</div>
+        <div class="links"><a href="feed.json">Open feed.json</a> &nbsp;·&nbsp; <a href="#feed">Sample signals below</a></div>
       </div>
       <div class="card">
-        <div class="tag">Pilot</div>
-        <h3>Agent Inbox</h3>
+        <div class="card-top"><h3>Agent Inbox</h3><span class="tag pilot">Pilot</span></div>
         <p>An email identity for every agent. Agents sign up, receive verification codes and get notified at an address of their own — instead of borrowing a human's mailbox.</p>
         <ul>
           <li>Dedicated inbox per agent on our domain</li>
           <li>Verification-code and sign-in mail routed to the owning agent</li>
           <li>Running today for our internal agent fleet</li>
         </ul>
+        <div class="links"><a href="#contact">Ask about the pilot</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <h2>How a signal is published</h2>
+    <p class="lede">Nothing reaches the feed on a scraper's say-so. Every entry passes the same three gates our own agents trade on.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="num">01</span>
+        <h3>Detect</h3>
+        <p>Monitors watch BNB Chain continuously for mints, claims and wallet inflows as they happen on-chain.</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h3>Verify</h3>
+        <p>Each candidate is re-read from the contract itself — price, supply, eligibility — before it is believed.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h3>Publish</h3>
+        <p>Verified signals are written to the feed as structured JSON with their transaction proof attached.</p>
       </div>
     </div>
   </div>
@@ -104,38 +271,80 @@
 <section id="feed">
   <div class="wrap">
     <h2>Live feed — sample signals</h2>
-    <p class="lede">Recent entries from the AgentData production feed, exactly as agents receive them. Full firehose is key-gated; the public sample is at <a href="feed.json">feed.json</a>.</p>
-    <table>
-      <tr><th>Date (WIB)</th><th>Signal</th><th>Detail</th><th>Source</th></tr>
-      <tr><td class="dim">2026-11-18</td><td>Free mint executed</td><td>AGENTONE Hero cards #5561, #5562 — quota 2/2, 0 BNB</td><td class="dim">BSC tx 0x19e1…f6b4</td></tr>
-      <tr><td class="dim">2026-11-18</td><td>Free claim executed</td><td>MCAT +51,786.639047 per share — 0 BNB</td><td class="dim">BSC tx 0x362b…6bfd</td></tr>
-      <tr><td class="dim">2026-11-17</td><td>Free mint executed</td><td>PXIO Miner #7794, tier Scribe — 0 BNB</td><td class="dim">BSC tx 0xe0f7…7e50</td></tr>
-      <tr><td class="dim">2026-11-18</td><td>Supply alert</td><td>MITI genesis sold out 500/500 free lots before window — flagged, no action</td><td class="dim">On-chain read</td></tr>
-    </table>
+    <p class="lede">Recent entries from the AgentData production feed, exactly as agents receive them. The full firehose is key-gated; this public sample is served at <a href="feed.json">feed.json</a>.</p>
+    <div class="feed-panel">
+      <div class="feed-head">
+        <span class="mono">GET https://xmail.my.id/feed.json</span>
+        <span class="mono"><span class="ok">200 OK</span> · updated 2026-11-18</span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <tr><th>Date (WIB)</th><th>Signal</th><th>Detail</th><th>Proof</th></tr>
+          <tr>
+            <td class="dim">2026-11-18</td>
+            <td><span class="chip exec">Mint executed</span></td>
+            <td>AGENTONE Hero cards #5561, #5562 — quota 2/2, 0 BNB</td>
+            <td><a class="mono" href="https://bscscan.com/tx/0x19e14bf87d8f2a9d1f7809c180dab1c765b8f380bb588e3fe42f263d7635f6b4">tx 0x19e1…f6b4</a></td>
+          </tr>
+          <tr>
+            <td class="dim">2026-11-18</td>
+            <td><span class="chip exec">Claim executed</span></td>
+            <td>MCAT +51,786.639047 per share — 0 BNB</td>
+            <td><a class="mono" href="https://bscscan.com/tx/0x362b16438844fd2c9a53b9a5f7d67ba528db790ab70f99dadc3511f855126bfd">tx 0x362b…6bfd</a></td>
+          </tr>
+          <tr>
+            <td class="dim">2026-11-17</td>
+            <td><span class="chip exec">Mint executed</span></td>
+            <td>PXIO Miner #7794, tier Scribe — 0 BNB</td>
+            <td><a class="mono" href="https://bscscan.com/tx/0xe0f7180aeff623d4407bd21316562715b2cd07cc23fc52192075d0f5cc857b7e">tx 0xe0f7…7e50</a></td>
+          </tr>
+          <tr>
+            <td class="dim">2026-11-18</td>
+            <td><span class="chip alert">Supply alert</span></td>
+            <td>MITI genesis sold out 500/500 free lots before the window — flagged, no action taken</td>
+            <td class="dim mono" style="font-size:12.5px">on-chain read</td>
+          </tr>
+        </table>
+      </div>
+    </div>
   </div>
 </section>
 
-<section id="about" class="about">
+<section id="about" class="alt">
   <div class="wrap">
     <h2>About XMail</h2>
-    <p>XMail is an early-stage, self-funded company based in Indonesia, founded in 2026. We operate a fleet of AI agents across research, monitoring and content production, and we build the infrastructure we found missing: trustworthy data feeds an agent can act on, and email identities an agent can work under.</p>
-    <p>AgentData grew out of our own on-chain monitoring work — months of verified, zero-cost opportunity detection on BNB Chain, run continuously by agents. Agent Inbox grew out of a simpler frustration: every new agent needed a mailbox before it could do anything at all.</p>
+    <div class="about-grid">
+      <div>
+        <p>XMail is an early-stage, self-funded company based in Indonesia, founded in 2026. We operate a fleet of AI agents across research, monitoring and content production, and we build the infrastructure we found missing: trustworthy data feeds an agent can act on, and email identities an agent can work under.</p>
+        <p>AgentData grew out of our own on-chain monitoring work — months of verified, zero-cost opportunity detection on BNB Chain, run continuously by agents. Agent Inbox grew out of a simpler frustration: every new agent needed a mailbox before it could do anything at all.</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Founded</dt><dd>2026</dd></div>
+        <div><dt>Based in</dt><dd>Indonesia</dd></div>
+        <div><dt>Stage</dt><dd>Early · self-funded</dd></div>
+        <div><dt>Products</dt><dd>AgentData · Agent Inbox</dd></div>
+        <div><dt>Contact</dt><dd><a href="mailto:hello@xmail.my.id">hello@xmail.my.id</a></dd></div>
+      </dl>
+    </div>
   </div>
 </section>
 
 <section id="contact">
   <div class="wrap">
-    <h2>Contact</h2>
-    <p class="lede">For access to the full AgentData feed or the Agent Inbox pilot, write to us:</p>
-    <p><a href="mailto:hello@xmail.my.id">hello@xmail.my.id</a></p>
+    <div class="contact-panel">
+      <h2 style="margin-bottom:10px">Talk to us</h2>
+      <p>For access to the full AgentData feed or the Agent Inbox pilot, write to us:</p>
+      <a class="mail" href="mailto:hello@xmail.my.id">hello@xmail.my.id</a>
+    </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap row">
     <div>© 2026 XMail · Indonesia</div>
-    <div>AgentData · Agent Inbox</div>
+    <div><a href="#products">AgentData</a> · <a href="#products">Agent Inbox</a> · <a href="feed.json">feed.json</a></div>
   </div>
 </footer>
+
 </body>
 </html>
